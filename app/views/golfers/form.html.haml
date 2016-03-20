@@ -1,0 +1,26 @@
+= form_for(@golfer, class: 'form-horizontal') do |f|
+  .form-group
+    = f.label :first_name, nil, class: 'col-sm-2'
+    .col-sm-10
+      = f.text_field :first_name, autofocus: true
+
+    = f.label :last_name, nil, class: 'col-sm-2'
+    .col-sm-10
+      = f.text_field :last_name
+
+  .form-group
+    = f.label :identifier, 'Member ID (0 for guest)', class: 'col-sm-2'
+    .col-sm-10
+      = f.text_field :identifier, default_value: 0
+
+  .form-group
+    = f.label :handicap, nil, class: 'col-sm-2'
+    .col-sm-2
+      = f.text_field :handicap
+
+  .clearfix
+  .form-group
+    .col-md-4
+      .btn-group
+        = submit_tag "Save", class: 'btn btn-primary'
+        = link_to "Cancel", golfers_path, class: 'btn btn-danger'

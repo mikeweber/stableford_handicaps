@@ -1,0 +1,30 @@
+- content_for :header do
+  Manage golfers
+
+.col-md-3
+  = link_to new_golfer_path, class: 'btn btn-primary' do
+    %span.glyphicon-plus
+    Add golfer
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th Golfer
+      %th Member ID
+      %th Handicap
+      %th Recent round
+      %th Manage
+  %tbody
+    - @golfers.each do |golfer|
+      %tr
+        %td= golfer.full_name
+        %td= golfer.identifier
+        %td= golfer.handicap
+        %td= fdate(golfer.date_of_most_recent_round) || '(n/a)'
+        %td
+          = link_to edit_golfer_path(golfer) do
+            Edit
+            %span.glyphicon.glyphicon-edit
+          = link_to golfer_path(golfer), method: :delete do
+            Delete
+            %span.glyphicon.glyphicon-remove

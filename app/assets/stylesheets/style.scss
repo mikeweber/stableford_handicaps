@@ -1,0 +1,33 @@
+.tableize {
+  border: 1px solid #333;
+}
+
+input.shortnum {
+  width: 30px;
+}
+
+.round-scores {
+  border: 1px solid #222;
+  height: 200px;
+  overflow-y: scroll;
+}
+
+input.changed {
+  background: #31708f;
+  color: #FFF;
+}
+
+.red {
+  color: #f94442;
+  font-size: 14px;
+}
+
+.green {
+  color: #3c763d;
+  font-size: 14px;
+}
+
+.glyphicon-placeholder {
+  display: inline-block;
+  width: 14px;
+}

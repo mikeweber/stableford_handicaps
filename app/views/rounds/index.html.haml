@@ -1,0 +1,38 @@
+- content_for :header do
+  Round scores
+
+= form_for(rounds_path, class: 'form-horizontal') do |f|
+  .col-md-4
+    Post scores for
+    = text_field_tag(:occurred_on, fdate(Date.today), tabindex: 1, autofocus: true)
+  .col-md-2.col-md-offset-6= submit_tag('Add rounds', class: 'btn btn-primary')
+
+  - @golfers.each.with_index do |golfer, index|
+    = fields_for("golfer[#{golfer.id}]", golfer.rounds.new(handicap: golfer.handicap)) do |round_form|
+      .col-md-4.round-scores
+        %table.table
+          %thead
+            %tr
+              %th{ colspan: 2 }= golfer.full_name_with_member_id
+              %th= golfer.handicap
+            %tr
+              %th Date
+              %th Score
+              %th Hdcp
+
+          %tbody
+            %tr
+              %td
+              %td= round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
+              %td= round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
+
+            - golfer.rounds.recent.each do |round|
+              %tr
+                %td= fdate round.occurred_on
+                %td= round.net_score(golfer.handicap)
+                %td
+                  = round.handicap
+                  = link_to(round_path(round), data: { method: :delete, confirm: 'Permanently remove round?' }) do
+                    %span.glyphicon.glyphicon-remove.red
+
+  .col-md-2.col-md-offset-10= submit_tag('Add rounds', class: 'btn btn-primary')
