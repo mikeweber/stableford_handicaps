@@ -93,4 +93,97 @@ RSpec.describe HandicapCalculator, type: :model do
       expect { calculator.update_handicap! }.to_not change(calculator.golfer, :handicap).from(7)
     end
   end
+
+  context "when a player is new" do
+    before(:each) do
+      golfer = Golfer.create!(first_name: 'New', last_name: 'Player', identifier: '0', handicap: 20)
+      @calculator = HandicapCalculator.new(golfer)
+      @calculator.post_score(37, 10.days.ago)
+      expect { @calculator.update_handicap! }.to_not change(@calculator.golfer, :handicap).from(20)
+    end
+
+    it "makes no change when there is only 1 or 2 rounds" do
+      @calculator.post_score(37, 9.days.ago)
+
+      expect(@calculator.golfer.rounds.count).to be(2)
+      expect { @calculator.update_handicap! }.to_not change(@calculator.golfer, :handicap).from(20)
+    end
+
+    it "counts 2 of the last 3 rounds" do
+      @calculator.post_score(37, 9.days.ago)
+      @calculator.post_score(37, 8.days.ago)
+
+      expect(@calculator.golfer.rounds.count).to be(3)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(20).to(19)
+    end
+
+    it "counts 2 of the last 4 rounds" do
+      @calculator.post_score(35, 9.days.ago)
+      @calculator.post_score(37, 8.days.ago)
+      @calculator.post_score(37, 7.days.ago)
+
+      expect(@calculator.golfer.rounds.count).to be(4)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(20).to(19)
+    end
+
+    it "counts 3 of the last 5 rounds" do
+      @calculator.post_score(32, 9.days.ago)
+      @calculator.post_score(37, 8.days.ago)
+      @calculator.post_score(37, 7.days.ago)
+      @calculator.post_score(37, 6.days.ago)
+
+      expect(@calculator.golfer.rounds.count).to be(5)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(20).to(19)
+    end
+
+    it "counts 3 of the last 6 rounds" do
+      @calculator.post_score(32, 9.days.ago)
+      @calculator.post_score(32, 8.days.ago)
+      @calculator.post_score(37, 7.days.ago)
+      @calculator.post_score(37, 6.days.ago)
+      @calculator.post_score(37, 5.days.ago)
+
+      expect(@calculator.golfer.rounds.count).to be(6)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(20).to(19)
+    end
+
+    it "counts 4 of the last 7 rounds" do
+      @calculator.post_score(32, 9.days.ago)
+      @calculator.post_score(32, 8.days.ago)
+      @calculator.post_score(37, 7.days.ago)
+      @calculator.post_score(37, 6.days.ago)
+      @calculator.post_score(37, 5.days.ago)
+      @calculator.post_score(37, 4.days.ago)
+
+      expect(@calculator.golfer.rounds.count).to be(7)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(20).to(19)
+    end
+
+    it "counts 4 of the last 8 rounds" do
+      @calculator.post_score(32, 9.days.ago)
+      @calculator.post_score(32, 8.days.ago)
+      @calculator.post_score(32, 7.days.ago)
+      @calculator.post_score(37, 6.days.ago)
+      @calculator.post_score(37, 5.days.ago)
+      @calculator.post_score(37, 4.days.ago)
+      @calculator.post_score(37, 3.days.ago)
+
+      expect(@calculator.golfer.rounds.count).to be(8)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(20).to(19)
+    end
+
+    it "counts 5 of the last 9 rounds" do
+      @calculator.post_score(32, 9.days.ago)
+      @calculator.post_score(32, 8.days.ago)
+      @calculator.post_score(32, 7.days.ago)
+      @calculator.post_score(37, 6.days.ago)
+      @calculator.post_score(37, 5.days.ago)
+      @calculator.post_score(37, 4.days.ago)
+      @calculator.post_score(37, 3.days.ago)
+      @calculator.post_score(37, 2.days.ago)
+
+      expect(@calculator.golfer.rounds.count).to be(9)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(20).to(19)
+    end
+  end
 end
