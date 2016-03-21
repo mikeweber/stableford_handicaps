@@ -1,7 +1,7 @@
 - content_for :header do
   Round scores
 
-= form_for(rounds_path, class: 'form-horizontal') do |f|
+= form_for('/rounds', class: 'form-horizontal') do |f|
   .col-md-4
     Post scores for
     = text_field_tag(:occurred_on, fdate(Date.today), tabindex: 1, autofocus: true)
