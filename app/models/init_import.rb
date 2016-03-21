@@ -20,7 +20,7 @@ class InitImport
         potential_scores.each.with_index do |scores, index|
           days, score = scores.split(/ +/)
           puts "Posting score #{golfers[index].golfer.full_name} - #{score} #{10 - days.to_i} days ago"
-          golfers[index].post_score(score, (10 - days.to_i).days.ago)
+          golfers[index].post_score(score, (20 - days.to_i).days.ago)
         end
       end
     end
