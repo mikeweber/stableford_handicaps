@@ -20,6 +20,7 @@
             %ul.nav.navbar-nav
               %li{ class: ('active' if current_page?(golfers_path)) }= link_to 'Manage golfers', golfers_path
               %li{ class: ('active' if current_page?(rounds_path)) }= link_to 'Post scores', rounds_path
+              %li{ class: ('active' if current_page?(recent_updates_rounds_path)) }= link_to 'Recent round summary', recent_updates_rounds_path
 
     .main-container.container-fluid
       - flash.each do |type, msg|
