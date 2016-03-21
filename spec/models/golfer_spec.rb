@@ -25,4 +25,19 @@ RSpec.describe Golfer, type: :model do
     guest_golfer3 = Golfer.create!(first_name: 'Tiger', last_name: 'Irons', identifier: 'guest', handicap: 2)
     guest_golfer4 = Golfer.create!(first_name: 'Tiger', last_name: 'Irons', identifier: 'guest', handicap: 2)
   end
+
+  it "returns last name, first name for the full name method" do
+    golfer = Golfer.create!(first_name: 'Tiger', last_name: 'Irons', identifier: '0', handicap: 0)
+    expect(golfer.full_name).to eq('Irons, Tiger')
+  end
+
+  it "returns only the last name when first name is blank" do
+    golfer = Golfer.create!(last_name: 'Guest', identifier: '0', handicap: 0)
+    expect(golfer.full_name).to eq('Guest')
+  end
+
+  it "returns only the first name when last name is blank" do
+    golfer = Golfer.create!(first_name: 'Guest', identifier: '0', handicap: 0)
+    expect(golfer.full_name).to eq('Guest')
+  end
 end

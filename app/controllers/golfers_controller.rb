@@ -8,6 +8,10 @@ class GolfersController < ApplicationController
     render :form
   end
 
+  def show
+    @golfer = Golfer.find(params[:id])
+  end
+
   def create
     @golfer = Golfer.new(golfer_params)
     if @golfer.save

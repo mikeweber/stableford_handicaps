@@ -1,0 +1,14 @@
+- content_for :header do
+  = @golfer.full_name
+
+%h3.col-md-2 Handicap
+.col-md-10= @golfer.handicap
+
+.clearfix
+
+%h3.col-md-2 History
+%ul.col-md-10.list-group
+  - if @golfer.rounds.empty?
+    %li.list-group-item.bold No rounds entered
+  - @golfer.rounds.recent.each do |round|
+    %li.list-group-item== #{round.net_score} on #{fdate round.occurred_on}

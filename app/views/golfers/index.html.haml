@@ -25,6 +25,6 @@
           = link_to edit_golfer_path(golfer) do
             Edit
             %span.glyphicon.glyphicon-edit
-          = link_to golfer_path(golfer), method: :delete do
+          = link_to golfer_path(golfer), data: { method: :delete, confirm: 'Permanently remove this golfer?' } do
             Delete
             %span.glyphicon.glyphicon-remove

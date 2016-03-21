@@ -8,7 +8,6 @@ class RoundsController < ApplicationController
     updated_golfers = []
     @golfers = MultiHandicapCalculator.new.post_scores_and_update_handicaps(round_date, params[:golfer])
 
-    flash[:success] = 
     render :results
   end
 

@@ -1,7 +1,7 @@
 class Golfer < ActiveRecord::Base
   validates :identifier, presence: true, uniqueness: { unless: ->(golfer) { %w(0 guest).include?(golfer.identifier) }, message: 'A golfer with this member ID already exists in the system' }
 
-  has_many :rounds
+  has_many :rounds, dependent: :delete_all
 
   scope :alphabetized, -> { order('last_name ASC, first_name ASC')}
 
@@ -10,7 +10,7 @@ class Golfer < ActiveRecord::Base
   end
 
   def full_name
-    "#{last_name}, #{first_name}"
+    "#{last_name}, #{first_name}".gsub(/^, |, $/, '')
   end
 
   def date_of_most_recent_round
