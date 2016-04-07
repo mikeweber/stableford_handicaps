@@ -13,7 +13,7 @@ class RoundsController < ApplicationController
     updated_golfers = []
     @golfers = MultiHandicapCalculator.new.post_scores_and_update_handicaps(round_date, params[:golfer])
 
-    flash[:success] = "Posted scores for #{golfers.length} golfers."
+    flash[:success] = "Posted scores for #{@golfers.length} golfers."
     redirect_to recent_updates_rounds_path
   end
 

@@ -29,13 +29,4 @@
               %td= round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
               %td= round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
 
-            - golfer.rounds.recent.each do |round|
-              %tr
-                %td= fdate round.occurred_on
-                %td= round.net_score
-                %td
-                  = round.handicap
-                  = link_to(round_path(round), data: { method: :delete, confirm: 'Permanently remove round?' }) do
-                    %span.glyphicon.glyphicon-remove.red
-
   .col-md-2.col-md-offset-10= submit_tag('Add rounds', class: 'btn btn-primary')
