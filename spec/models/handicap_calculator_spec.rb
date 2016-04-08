@@ -186,4 +186,60 @@ RSpec.describe HandicapCalculator, type: :model do
       expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(20).to(19)
     end
   end
+
+  context "when changing the handicap after each posted score" do
+    it "should update to the correct handicap" do
+      golfer = Golfer.create!(first_name: 'New', last_name: 'Player', identifier: '0', handicap: 15)
+      @calculator = HandicapCalculator.new(golfer)
+
+      @calculator.post_score(40, 10.days.ago)
+      expect { @calculator.update_handicap! }.to_not change(@calculator.golfer, :handicap).from(15)
+
+      @calculator.post_score(36, 9.days.ago)
+      expect { @calculator.update_handicap! }.to_not change(@calculator.golfer, :handicap).from(15)
+
+      @calculator.post_score(32, 8.days.ago)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(15).to(13)
+
+      @calculator.post_score(40, 7.days.ago)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(13).to(10)
+
+      @calculator.post_score(30, 6.days.ago)
+      expect { @calculator.update_handicap! }.to_not change(@calculator.golfer, :handicap).from(10)
+
+      @calculator.post_score(28, 5.days.ago)
+      expect { @calculator.update_handicap! }.to_not change(@calculator.golfer, :handicap).from(10)
+
+      @calculator.post_score(28, 4.days.ago)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(10).to(11)
+
+      @calculator.post_score(32, 3.days.ago)
+      expect { @calculator.update_handicap! }.to_not change(@calculator.golfer, :handicap).from(11)
+
+      @calculator.post_score(32, 2.days.ago)
+      expect { @calculator.update_handicap! }.to change(@calculator.golfer, :handicap).from(11).to(12)
+
+      @calculator.post_score(30, 1.days.ago)
+      expect { @calculator.update_handicap! }.to_not change(@calculator.golfer, :handicap).from(12)
+    end
+  end
+
+  context "when removing a round" do
+    it "should recalculate the handicap" do
+      golfer = Golfer.create!(first_name: 'New', last_name: 'Player', identifier: '0', handicap: 20)
+      @calculator = HandicapCalculator.new(golfer)
+      @calculator.post_score(37, 10.days.ago).update_handicap!
+      @calculator.post_score(32, 9.days.ago).update_handicap!
+      @calculator.post_score(32, 8.days.ago).update_handicap!
+      @calculator.post_score(32, 7.days.ago).update_handicap!
+      @calculator.post_score(37, 6.days.ago).update_handicap!
+      @calculator.post_score(37, 5.days.ago).update_handicap!
+      @calculator.post_score(37, 4.days.ago).update_handicap!
+      @calculator.post_score(37, 3.days.ago).update_handicap!
+      @calculator.post_score(37, 2.days.ago).update_handicap!
+      expect { @calculator.post_score(40, 1.days.ago).update_handicap! }.to change(@calculator.golfer, :handicap).from(18).to(17)
+
+      expect { @calculator.remove_score(@calculator.golfer.rounds.recent.first.id) }.to change(@calculator.golfer, :handicap).from(17).to(18)
+    end
+  end
 end

@@ -10,6 +10,11 @@ class HandicapCalculator
     return self
   end
 
+  def remove_score(round_id)
+    golfer.rounds.delete(round_id)
+    update_handicap!
+  end
+
   def update_handicap!
     return false if golfer.rounds.count <= 2
 
