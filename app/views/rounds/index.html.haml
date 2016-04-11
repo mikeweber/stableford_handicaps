@@ -10,23 +10,17 @@
   - @golfers.each.with_index do |golfer, index|
     = fields_for("golfer[#{golfer.id}]", golfer.rounds.new(handicap: golfer.handicap)) do |round_form|
       .col-md-4.round-scores
-        %table.table
-          %thead
-            %tr
-              %th{ colspan: 2 }
-                = link_to(golfer_path(golfer), target: '_blank') do
-                  %span.glyphicon.glyphicon-search
-                = golfer.full_name_with_member_id
-              %th= golfer.handicap
-            %tr
-              %th Date
-              %th Score
-              %th Hdcp
+        .col-md-6
+          = link_to(golfer_path(golfer), target: '_blank') do
+            %span.glyphicon.glyphicon-search
+            = golfer.full_name_with_member_id
 
-          %tbody
-            %tr
-              %td
-              %td= round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
-              %td= round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
+
+        .col-md-3
+          = round_form.label(:net_score, 'Score', class: 'right')
+          = round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
+        .col-md-3
+          = round_form.label(:handicap, 'Handicap', class: 'right')
+          = round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
 
   .col-md-2.col-md-offset-10= submit_tag('Add rounds', class: 'btn btn-primary')

@@ -18,7 +18,8 @@ class RoundsController < ApplicationController
   end
 
   def destroy
-    Round.find(params[:id]).destroy
-    redirect_to rounds_path
+    round = Round.find(params[:id])
+    round.destroy
+    redirect_to golfer_path(round.golfer)
   end
 end

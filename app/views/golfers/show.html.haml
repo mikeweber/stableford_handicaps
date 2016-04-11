@@ -1,14 +1,33 @@
 - content_for :header do
   = @golfer.full_name
 
-%h3.col-md-2 Handicap
-.col-md-10= @golfer.handicap
+%dl.dl-horizontal
+  %dt Handicap
+  %dd= @golfer.handicap
 
-.clearfix
+  %hr
 
-%h3.col-md-2 History
-%ul.col-md-10.list-group
-  - if @golfer.rounds.empty?
-    %li.list-group-item.bold No rounds entered
-  - @golfer.rounds.recent.each do |round|
-    %li.list-group-item== #{round.net_score} on #{fdate round.occurred_on}
+  %dt History
+  %dd
+    .col-md-5
+      %table.table.table-striped
+        %thead
+          %tr
+            %th.col-md-2 Trend
+            %th.col-md-3 Handicap
+            %th.col-md-3 Score
+            %th.col-md-4 Date
+            %th
+        %tbody
+          - if @golfer.rounds.empty?
+            %td.center.bold{ colspan: 5 } No rounds entered
+          - else
+            - @golfer.rounds.recent.each do |round|
+              %tr
+                %td= handicap_movement_since_last_round(round)
+                %td= round.handicap
+                %td= fdate round.occurred_on
+                %td= round.net_score
+                %td
+                  = link_to(round_path(round), method: :delete, data: { confirm: 'Are you sure you want to remove this round?' }) do
+                    %span.glyphicon.glyphicon-remove

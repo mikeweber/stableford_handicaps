@@ -1,11 +1,15 @@
-- content_for(:header) do
-  Recent scores
+- content_for :header do
+  Recent rounds
 
 %h3== Scores on #{fdate @rounds.first.occurred_on}
 
-%ul.list-group
+%ul.col-md-12.list-group
   - @rounds.each do |round|
     %li.list-group-item
-      = handicap_movement_since_last_round(round)
-      %span.handicap= round.golfer.handicap
-      = round.golfer.full_name_with_member_id
+      .col-md-1
+        = handicap_movement_since_last_round(round)
+        %span.handicap_summary= round.golfer.handicap
+      .col-md-1
+        %span.round_date= fdate round.occurred_on
+      %span.golfer_summary= link_to(round.golfer.full_name_with_member_id, edit_golfer_path(round.golfer))
+
