@@ -1,0 +1,11 @@
+- content_for(:header) do
+  Recent scores
+
+%h3== Scores on #{fdate @rounds.first.occurred_on}
+
+%ul.list-group
+  - @rounds.each do |round|
+    %li.list-group-item
+      = handicap_movement_since_last_round(round)
+      %span.handicap= round.golfer.handicap
+      = round.golfer.full_name_with_member_id

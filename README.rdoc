@@ -7,3 +7,11 @@ Track the stableford scores of golf games, and adjust player handicaps based on
 the the best 5 of the most recent 10 rounds. Handicaps will be adjusted when,
 using the player's current handicap, their 5 best rounds either average below 34
 (handicap will go up), or those rounds average above 36.5 (handicap will go down).
+
+= TODO
+* Add admins and logins to protect editing of handicaps
+* Streamline "Post scores" page -- remove history from this page
+* Create a summary page that shows only the players who have changed handicaps on a given day
+  * Show old _and_ new handicap
+* Create "read only" view that shows player history
+  * Maybe add chart of individual score/handicap history?
