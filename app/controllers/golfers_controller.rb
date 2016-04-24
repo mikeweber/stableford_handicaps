@@ -9,7 +9,7 @@ class GolfersController < ApplicationController
   end
 
   def show
-    @golfer = Golfer.find(params[:id])
+    @handicap_calculator = HandicapCalculator.new(Golfer.find(params[:id]))
   end
 
   def create

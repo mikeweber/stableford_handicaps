@@ -13,6 +13,10 @@ class Golfer < ActiveRecord::Base
     "#{last_name}, #{first_name}".gsub(/^, |, $/, '')
   end
 
+  def most_recent_round_before(round_date)
+    rounds.where(Round.arel_table[:occurred_on].lt(round_date)).first
+  end
+
   def date_of_most_recent_round
     rounds.recent.limit(1).pluck(:occurred_on).first
   end

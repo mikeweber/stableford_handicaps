@@ -7,7 +7,7 @@
   - @rounds.each do |round|
     %li.list-group-item
       .col-md-1
-        = handicap_movement_since_last_round(round)
+        = handicap_movement_since_last_round(round.golfer.handicap, round.handicap)
         %span.handicap_summary= round.golfer.handicap
       .col-md-1
         %span.round_date= fdate round.occurred_on

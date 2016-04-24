@@ -1,9 +1,12 @@
 - content_for :header do
-  = @golfer.full_name
+  = @handicap_calculator.golfer.full_name
+
+.btn-group
+  = link_to('Edit', edit_golfer_path(@handicap_calculator.golfer), class: 'btn btn-primary')
 
 %dl.dl-horizontal
   %dt Handicap
-  %dd= @golfer.handicap
+  %dd= @handicap_calculator.golfer.handicap
 
   %hr
 
@@ -19,15 +22,16 @@
             %th.col-md-4 Date
             %th
         %tbody
-          - if @golfer.rounds.empty?
-            %td.center.bold{ colspan: 5 } No rounds entered
+          - if @handicap_calculator.recent_rounds.empty?
+            %tr
+              %td.center.bold{ colspan: 5 } No rounds entered
           - else
-            - @golfer.rounds.recent.each do |round|
-              %tr
-                %td= handicap_movement_since_last_round(round)
+            - @handicap_calculator.golfer.rounds.recent_history.each.with_index do |round, i|
+              %tr{ class: golf_round_history_class(@handicap_calculator.recent_rounds, @handicap_calculator.best_recent_rounds, round, i) }
+                %td= handicap_movement_since_last_round(round.handicap, @handicap_calculator.golfer.rounds.recent_history[i + 1].try(:handicap))
                 %td= round.handicap
-                %td= fdate round.occurred_on
                 %td= round.net_score
+                %td= fdate round.occurred_on
                 %td
                   = link_to(round_path(round), method: :delete, data: { confirm: 'Are you sure you want to remove this round?' }) do
                     %span.glyphicon.glyphicon-remove

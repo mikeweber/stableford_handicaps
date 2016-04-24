@@ -239,7 +239,19 @@ RSpec.describe HandicapCalculator, type: :model do
       @calculator.post_score(37, 2.days.ago).update_handicap!
       expect { @calculator.post_score(40, 1.days.ago).update_handicap! }.to change(@calculator.golfer, :handicap).from(18).to(17)
 
-      expect { @calculator.remove_score(@calculator.golfer.rounds.recent.first.id) }.to change(@calculator.golfer, :handicap).from(17).to(18)
+      recent_round = @calculator.golfer.rounds.recent.first
+      expect(recent_round.net_score).to eq(40)
+      expect { @calculator.remove_score(recent_round.id) }.to change(@calculator.golfer, :handicap).from(17).to(18)
+    end
+
+    it "should not change the handicap when removing the only round" do
+      golfer = Golfer.create!(first_name: 'New', last_name: 'Player', identifier: '0', handicap: 20)
+      @calculator = HandicapCalculator.new(golfer)
+      @calculator.post_score(37, 10.days.ago).update_handicap!
+
+      recent_round = @calculator.golfer.rounds.recent.first
+      expect(recent_round.net_score).to eq(37)
+      expect { @calculator.remove_score(recent_round.id) }.to_not change(@calculator.golfer, :handicap).from(20)
     end
   end
 end

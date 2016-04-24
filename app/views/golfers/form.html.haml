@@ -24,4 +24,5 @@
       .btn-group
         = submit_tag "Save", class: 'btn btn-primary'
         = link_to "Cancel", golfers_path, class: 'btn btn-danger'
-        = link_to "View history", golfer_path(@golfer), class: 'btn btn-info'
+        - unless @golfer.new_record?
+          = link_to "View history", golfer_path(@golfer), class: 'btn btn-info'

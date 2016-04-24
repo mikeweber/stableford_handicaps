@@ -12,7 +12,7 @@ class HandicapCalculator
 
   def remove_score(round_id)
     golfer.rounds.delete(round_id)
-    update_handicap!
+    reset_handicap_to_most_recent_round!
   end
 
   def update_handicap!
@@ -32,23 +32,35 @@ class HandicapCalculator
   end
 
   def net_average
-    best_scores = best_recent_scores
-    best_scores.sum / best_scores.length.to_f
+    best_recent_scores_sum / best_recent_scores.length.to_f
+  end
+
+  def best_recent_scores_sum
+    best_recent_scores.sum
   end
 
   def best_recent_scores
+    best_recent_rounds.collect { |round| round.net_score(golfer.handicap) }
+  end
+
+  def best_recent_rounds
     sorted_rounds[0..round_limit]
   end
 
   def sorted_rounds
-    recent_rounds.sort_by { |score| -score }
-  end
-
-  def recent_rounds
-    golfer.rounds.recent.collect { |round| round.net_score(golfer.handicap) }
+    recent_rounds.sort_by { |round| -round.net_score(golfer.handicap) }
   end
 
   def round_limit
     [(recent_rounds.count / 2.0).ceil, 5].min - 1
+  end
+
+  def reset_handicap_to_most_recent_round!
+    return unless most_recent_round = recent_rounds.first
+    golfer.update_attribute(:handicap, most_recent_round.handicap)
+  end
+
+  def recent_rounds
+    golfer.rounds.recent
   end
 end
