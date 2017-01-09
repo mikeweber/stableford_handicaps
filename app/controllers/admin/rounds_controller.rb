@@ -1,4 +1,4 @@
-class RoundsController < ApplicationController
+class Admin::RoundsController < ApplicationController
   def index
     @golfers = Golfer.alphabetized
   end

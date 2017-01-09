@@ -16,6 +16,11 @@ input.changed {
   color: #FFF;
 }
 
+input:focus {
+  background: #31c596;
+  color: #FFF;
+}
+
 .red {
   color: #f94442;
   font-size: 14px;

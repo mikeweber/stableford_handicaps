@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
-  root 'rounds#index'
+  root 'admin/rounds#index'
 
-  resources :golfers
-  resources :rounds do
-    collection do
-      get :recent_updates
+  resources :sessions
+  namespace :admin do
+    resources :golfers
+    resources :rounds do
+      collection do
+        get :recent_updates
+      end
     end
   end
 end

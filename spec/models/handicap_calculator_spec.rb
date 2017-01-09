@@ -237,11 +237,31 @@ RSpec.describe HandicapCalculator, type: :model do
       @calculator.post_score(37, 4.days.ago).update_handicap!
       @calculator.post_score(37, 3.days.ago).update_handicap!
       @calculator.post_score(37, 2.days.ago).update_handicap!
-      expect { @calculator.post_score(40, 1.days.ago).update_handicap! }.to change(@calculator.golfer, :handicap).from(18).to(17)
+      expect { @calculator.post_score(45, 1.days.ago).update_handicap! }.to change(@calculator.golfer, :handicap).from(18).to(16)
 
-      recent_round = @calculator.golfer.rounds.recent.first
-      expect(recent_round.net_score).to eq(40)
-      expect { @calculator.remove_score(recent_round.id) }.to change(@calculator.golfer, :handicap).from(17).to(18)
+      expect { @calculator.remove_score(@calculator.golfer.rounds.recent.first.id) }.to change(@calculator.golfer, :handicap).from(16).to(18)
+    end
+
+    it "should recalculate the handicap when an older score is removed" do
+      golfer_without_high_score = Golfer.create!(first_name: 'Original', last_name: 'Player', identifier: '0', handicap: 20)
+      golfer = Golfer.create!(first_name: 'Duplicate', last_name: 'Player', identifier: '0', handicap: 20)
+
+      scores = [37, 32, 32, 32, 45, 37, 37, 37, 37, 35]
+      scores_without_high_score = [*scores[0..3], *scores[5..-1]]
+      expect(scores_without_high_score.include?(45)).to be_falsey
+      calculator_without_high_score = HandicapCalculator.new(golfer_without_high_score)
+      scores_without_high_score.each.with_index do |score, index|
+        calculator_without_high_score.post_score(score, (10 - index).days.ago).update_handicap!
+      end
+      expect(calculator_without_high_score.golfer.handicap).to eq(18)
+
+      calculator = HandicapCalculator.new(golfer)
+      scores.each.with_index do |score, index|
+        calculator.post_score(score, (10 - index).days.ago).update_handicap!
+      end
+
+      high_score = calculator.golfer.rounds.recent.detect { |r| r.net_score == 45 }
+      expect { calculator.remove_score(high_score.id) }.to change(calculator.golfer, :handicap).from(14).to(18)
     end
 
     it "should not change the handicap when removing the only round" do
@@ -253,5 +273,6 @@ RSpec.describe HandicapCalculator, type: :model do
       expect(recent_round.net_score).to eq(37)
       expect { @calculator.remove_score(recent_round.id) }.to_not change(@calculator.golfer, :handicap).from(20)
     end
+
   end
 end

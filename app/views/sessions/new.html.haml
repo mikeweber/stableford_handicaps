@@ -1,0 +1,16 @@
+= form_for('/session', object: @admin) do |f|
+  .form-group
+    = f.label :email, nil, class: 'col-sm-2'
+    .col-sm-10
+      = f.text_field :email, autofocus: true
+
+    = f.label :password, nil, class: 'col-sm-2'
+    .col-sm-10
+      = f.password_field :password
+
+  .clearfix
+  .form-group
+    .col-md-4
+      .btn-group
+        = submit_tag "Login", class: 'btn btn-primary'
+
