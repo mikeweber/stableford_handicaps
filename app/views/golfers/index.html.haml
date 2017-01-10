@@ -1,0 +1,17 @@
+- content_for :header do
+  Handicaps
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th Golfer
+      %th Member ID
+      %th Handicap
+      %th Recent round
+  %tbody
+    - @golfers.each do |golfer|
+      %tr
+        %td= link_to(golfer.full_name, golfer_path(golfer))
+        %td= golfer.identifier
+        %td= golfer.handicap
+        %td= fdate(golfer.date_of_most_recent_round) || '(n/a)'

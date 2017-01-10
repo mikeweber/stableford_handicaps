@@ -2,7 +2,7 @@
   Manage golfers
 
 .col-md-3
-  = link_to new_golfer_path, class: 'btn btn-primary' do
+  = link_to new_admin_golfer_path, class: 'btn btn-primary' do
     %span.glyphicon-plus
     Add golfer
 
@@ -17,14 +17,14 @@
   %tbody
     - @golfers.each do |golfer|
       %tr
-        %td= golfer.full_name
+        %td= link_to golfer.full_name, admin_golfer_path(golfer)
         %td= golfer.identifier
         %td= golfer.handicap
         %td= fdate(golfer.date_of_most_recent_round) || '(n/a)'
         %td
-          = link_to edit_golfer_path(golfer) do
+          = link_to edit_admin_golfer_path(golfer) do
             Edit
             %span.glyphicon.glyphicon-edit
-          = link_to golfer_path(golfer), data: { method: :delete, confirm: 'Permanently remove this golfer?' } do
+          = link_to admin_golfer_path(golfer), data: { method: :delete, confirm: 'Permanently remove this golfer?' } do
             Delete
             %span.glyphicon.glyphicon-remove

@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  root 'admin/rounds#index'
+  root 'golfers#index'
 
   resources :sessions
+  resources :golfers
   namespace :admin do
     resources :golfers
     resources :rounds do

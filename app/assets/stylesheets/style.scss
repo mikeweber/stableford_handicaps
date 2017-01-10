@@ -1,3 +1,26 @@
+body {
+  padding-top: 50px;
+}
+
+.fixed-add-rounds {
+  padding: 20px 0;
+  position: fixed;
+  background: #FFF;
+  z-index: 1;
+  border-bottom: 1px solid #BBB;
+  width: 100%;
+  margin-left: -15px;
+  margin-top: -15px;
+}
+
+.fixed-rounds-container {
+  padding-top: 90px;
+}
+
+.main {
+  margin-top: 15px;
+}
+
 .tableize {
   border: 1px solid #333;
 }
@@ -8,7 +31,6 @@ input.shortnum {
 
 .round-scores {
   border: 1px solid #222;
-  padding: 5px 0;
 }
 
 input.changed {
@@ -45,4 +67,22 @@ input:focus {
 
 a[data-method="delete"] {
   color: #f94442;
+}
+
+.high-score {
+  font-weight: bold;
+}
+
+.old-score {
+  color: #888;
+  font-style: italic;
+}
+
+.current-handicap {
+}
+
+.high-score-total {
+  color: #888;
+  font-style: italic;
+  float: right;
 }

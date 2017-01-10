@@ -1,4 +1,4 @@
-= form_for('/session', object: @admin) do |f|
+= form_for(@admin, url: '/sessions') do |f|
   .form-group
     = f.label :email, nil, class: 'col-sm-2'
     .col-sm-10

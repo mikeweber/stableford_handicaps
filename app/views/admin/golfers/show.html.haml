@@ -1,37 +1,26 @@
 - content_for :header do
   = @handicap_calculator.golfer.full_name
 
-.btn-group
-  = link_to('Edit', edit_golfer_path(@handicap_calculator.golfer), class: 'btn btn-primary')
-
 %dl.dl-horizontal
   %dt Handicap
-  %dd= @handicap_calculator.golfer.handicap
+  %dd= @golfer.handicap
 
-  %hr
-
-  %dt History
+  %dt Rounds played
   %dd
-    .col-md-5
-      %table.table.table-striped
-        %thead
-          %tr
-            %th.col-md-2 Trend
-            %th.col-md-3 Handicap
-            %th.col-md-3 Score
-            %th.col-md-4 Date
-            %th
-        %tbody
-          - if @handicap_calculator.recent_rounds.empty?
-            %tr
-              %td.center.bold{ colspan: 5 } No rounds entered
-          - else
-            - @handicap_calculator.golfer.rounds.recent_history.each.with_index do |round, i|
-              %tr{ class: golf_round_history_class(@handicap_calculator.recent_rounds, @handicap_calculator.best_recent_rounds, round, i) }
-                %td= handicap_movement_since_last_round(round.handicap, @handicap_calculator.golfer.rounds.recent_history[i + 1].try(:handicap))
-                %td= round.handicap
-                %td= round.net_score
-                %td= fdate round.occurred_on
-                %td
-                  = link_to(round_path(round), method: :delete, data: { confirm: 'Are you sure you want to remove this round?' }) do
-                    %span.glyphicon.glyphicon-remove
+    %ul.col-md-10.list-group
+      - if @golfer.rounds.empty?
+        %li.list-group-item.bold No rounds entered
+      - @golfer.rounds.ordered_by_recent.limit(15).each.with_index do |round, index|
+        - is_high_score = @calculator.high_round?(round)
+        %li.list-group-item{ class: [('high-score' if is_high_score), ('old-score' if index >= 10)].join(' ') }
+          == #{round.net_score} on #{fdate round.occurred_on}
+          = '*' if is_high_score
+          - if current_admin
+            = link_to(admin_round_path(round), class: 'right-align', data: { method: :delete, confirm: 'Permanently remove round?' }) do
+              %span.glyphicon.glyphicon-remove.red
+
+  %dt Sum of high scores
+  %dd= @calculator.sum_of_best_scores
+
+  %dt Average of high scores
+  %dd= @calculator.net_average

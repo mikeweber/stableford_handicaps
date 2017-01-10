@@ -12,20 +12,25 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     = csrf_meta_tags
   %body
-    .header-container
-      %header.wrapper.clearfix
-        %h1.title= page_title
-        %nav.navbar.navbar-default
+    %nav.navbar.navbar-default.navbar-fixed-top
+      .container
+        %header.wrapper.clearfix
           .container-fluid
-            %ul.nav.navbar-nav
-              %li{ class: ('active' if current_page?(admin_golfers_path)) }= link_to 'Manage golfers', admin_golfers_path
-              %li{ class: ('active' if current_page?(admin_rounds_path)) }= link_to 'Post scores', admin_rounds_path
-              %li{ class: ('active' if current_page?(recent_updates_admin_rounds_path)) }= link_to 'Recent round summary', recent_updates_admin_rounds_path
+            - if current_admin
+              %ul.nav.navbar-nav
+                %li{ class: ('active' if current_page?(admin_golfers_path)) }= link_to 'Manage golfers', admin_golfers_path
+                %li{ class: ('active' if current_page?(admin_rounds_path)) }= link_to 'Post scores', admin_rounds_path
+                %li{ class: ('active' if current_page?(recent_updates_admin_rounds_path)) }= link_to 'Recent round summary', recent_updates_admin_rounds_path
+              %ul.nav.navbar-nav.navbar-right
+                %li= link_to 'Logout', sessions_path, data: { method: :delete }
+            - else
+              %ul.nav.navbar-nav
+                %li{ class: ('active' if current_page?(golfers_path)) }= link_to 'All golfers', golfers_path
 
     .main-container.container-fluid
       - flash.each do |type, msg|
         .alert{ class: "alert-#{type}" }= msg
-      .main.wrapper.clearfix
+      .main.wrapper
         = yield
     .footer-container
       %footer.wrapper

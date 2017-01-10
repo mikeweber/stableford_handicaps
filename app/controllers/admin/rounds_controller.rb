@@ -1,4 +1,4 @@
-class Admin::RoundsController < ApplicationController
+class Admin::RoundsController < AdminApplicationController
   def index
     @golfers = Golfer.alphabetized
   end
@@ -14,12 +14,11 @@ class Admin::RoundsController < ApplicationController
     @golfers = MultiHandicapCalculator.new.post_scores_and_update_handicaps(round_date, params[:golfer])
 
     flash[:success] = "Posted scores for #{@golfers.length} golfers."
-    redirect_to recent_updates_rounds_path
+    redirect_to recent_updates_admin_rounds_path
   end
 
   def destroy
-    round = Round.find(params[:id])
-    round.destroy
-    redirect_to golfer_path(round.golfer)
+    Round.find(params[:id]).destroy
+    redirect_to admin_rounds_path
   end
 end

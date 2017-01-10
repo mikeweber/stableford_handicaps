@@ -1,4 +1,5 @@
 class Admin::GolfersController < AdminApplicationController
+
   def index
     @golfers = Golfer.alphabetized
   end
@@ -9,14 +10,15 @@ class Admin::GolfersController < AdminApplicationController
   end
 
   def show
-    @handicap_calculator = HandicapCalculator.new(Golfer.find(params[:id]))
+    @golfer = Golfer.find(params[:id])
+    @calculator = HandicapCalculator.new(@golfer)
   end
 
   def create
     @golfer = Golfer.new(golfer_params)
     if @golfer.save
       flash[:success] = "#{@golfer.full_name_with_member_id} created"
-      redirect_to golfers_path
+      redirect_to admin_golfers_path
     else
       render :form
     end
@@ -32,7 +34,7 @@ class Admin::GolfersController < AdminApplicationController
     @golfer.attributes = golfer_params
     if @golfer.save
       flash[:success] = "#{@golfer.full_name_with_member_id} updated"
-      redirect_to golfers_path
+      redirect_to admin_golfers_path
     else
       render :form
     end
@@ -42,7 +44,7 @@ class Admin::GolfersController < AdminApplicationController
     golfer = Golfer.find(params[:id])
     golfer.destroy
     flash[:success] = "#{golfer.full_name} has been removed"
-    redirect_to golfers_path
+    redirect_to admin_golfers_path
   end
 
   private

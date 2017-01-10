@@ -15,6 +15,10 @@ class HandicapCalculator
     redo_handicap!
   end
 
+  def high_round?(round)
+    best_recent_rounds.include?(round)
+  end
+
   def redo_handicap!
     old_handicap = golfer.handicap
     golfer.handicap = recent_rounds.last.handicap
@@ -56,16 +60,27 @@ class HandicapCalculator
   end
 
   def net_average(recent_scores = recent_round_net_scores)
-    best_scores = best_recent_scores(recent_scores)
-    best_scores.sum / best_scores.length.to_f
+    sum_of_best_scores(recent_scores) / round_limit(recent_scores).to_f
+  end
+
+  def sum_of_best_scores(recent_scores = recent_round_net_scores)
+    best_recent_scores(recent_scores).sum
   end
 
   def best_recent_scores(scores)
     sorted_scores(scores)[0..(round_limit(scores) - 1)]
   end
 
+  def best_recent_rounds(rounds = recent_rounds)
+    sorted_rounds(rounds)[0..(round_limit(rounds) - 1)]
+  end
+
   def sorted_scores(scores = recent_round_net_scores)
     scores.sort_by { |score| -score }
+  end
+
+  def sorted_rounds(rounds)
+    rounds.sort_by { |round| -round.net_score(golfer.handicap) }
   end
 
   def recent_round_net_scores
