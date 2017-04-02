@@ -86,3 +86,23 @@ a[data-method="delete"] {
   font-style: italic;
   float: right;
 }
+
+.scrollable-table-container {
+  margin-bottom: 20px;
+
+  .table {
+    margin-bottom: 0;
+  }
+
+  .scrollable-table {
+    height: 100px;
+    overflow-y: auto;
+    border-bottom: 1px solid #999;
+  }
+
+  td, th {
+    &.round-date {
+      width: 65%;
+    }
+  }
+}

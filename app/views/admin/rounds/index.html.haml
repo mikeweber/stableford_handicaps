@@ -11,23 +11,31 @@
   .fixed-rounds-container
     - @golfers.each.with_index do |golfer, index|
       = fields_for("golfer[#{golfer.id}]", golfer.rounds.new(handicap: golfer.handicap)) do |round_form|
-        .col-md-4
-          %table.table.table-bordered
+        .col-md-4.scrollable-table-container
+          %table.table.table-bordered.scrollable-table-header
             %thead
               %tr.active
-                %th{ style: 'width: 65%' }
+                %th.round-date
                   = link_to(admin_golfer_path(golfer), target: '_blank') do
                     %span.glyphicon.glyphicon-search
                   = golfer.full_name_with_member_id
-                %th
+                %th.round-score
                   %span.current-handicap= golfer.handicap
                   %span.high-score-total== (Total #{HandicapCalculator.new(golfer).sum_of_best_scores})
               %tr
-                %th Score
-                %th Hdcp
+                %th.round-date Score
+                %th.round-score Hdcp
 
             %tbody
               %tr
-                %td= round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
-                %td= round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
+                %td.round-date= round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
+                %td.round-score= round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
+
+          .scrollable-table
+            %table.table.table-bordered
+              %thead
+                - golfer.rounds.recent.each do |round|
+                  %tr
+                    %td.round-date= fdate round.occurred_on
+                    %td.round-score= round.net_score
 
