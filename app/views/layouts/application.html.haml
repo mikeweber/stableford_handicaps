@@ -31,6 +31,8 @@
       - flash.each do |type, msg|
         .alert{ class: "alert-#{type}" }= msg
       .main.wrapper
+        - if c = content_for(:header)
+          %h1= c
         = yield
     .footer-container
       %footer.wrapper
