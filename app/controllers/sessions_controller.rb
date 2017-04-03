@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
     end
   end
 
-  def delete
+  def sign_out
     session[:admin_id] = @current_admin = nil
     redirect_to root_path
   end

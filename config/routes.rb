@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   root 'golfers#index'
 
-  resources :sessions
+  resources :sessions do
+    collection do
+      delete :sign_out
+    end
+  end
   resources :golfers
   namespace :admin do
     resources :golfers
