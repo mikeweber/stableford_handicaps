@@ -20,10 +20,16 @@ class HandicapCalculator
   end
 
   def redo_handicap!
+    return if recent_rounds.empty?
     old_handicap = golfer.handicap
-    golfer.handicap = recent_rounds.last.handicap
-    recent_rounds.length.times do |i|
-      update_handicap(recent_rounds[(recent_rounds.length - i - 1)..-1])
+    oldest_round_index = [golf_rounds.count, 20].min - 1
+    most_recent_index = [oldest_round_index - 9, 0].max
+    golfer.handicap = golf_rounds.ordered_by_recent[most_recent_index].handicap
+    while most_recent_index >= 0
+      round_window = golf_rounds.ordered_by_recent[most_recent_index..oldest_round_index]
+      update_handicap(round_window)
+      most_recent_index -= 1
+      oldest_round_index -= 1
     end
 
     golfer.update(handicap: golfer.handicap)
@@ -35,7 +41,7 @@ class HandicapCalculator
     return false
   end
 
-  def update_handicap!(rounds = golf_rounds)
+  def update_handicap!(rounds = recent_rounds)
     return false unless handicap_changed = update_handicap(rounds)
 
     golfer.update(handicap: golfer.handicap)
@@ -47,11 +53,11 @@ class HandicapCalculator
     return false if rounds.length <= 2
 
     handicap_changed = false
-    while net_average(round_scores(rounds)) <= 34
+    while net_average(round_net_scores(rounds)) <= 34
       golfer.handicap += 1
       handicap_changed = :up
     end
-    while net_average(round_scores(rounds)) >= 36.5
+    while net_average(round_net_scores(rounds)) >= 36.5
       golfer.handicap -= 1
       handicap_changed = :down
     end
@@ -84,10 +90,10 @@ class HandicapCalculator
   end
 
   def recent_round_net_scores
-    round_scores(golf_rounds.recent)
+    round_net_scores(golf_rounds.recent)
   end
 
-  def round_scores(rounds)
+  def round_net_scores(rounds)
     rounds.collect { |round| round.net_score(golfer.handicap) }
   end
 
