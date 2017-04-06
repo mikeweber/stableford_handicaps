@@ -32,7 +32,7 @@
         .alert{ class: "alert-#{type}" }= msg
       .main.wrapper
         - if c = content_for(:header)
-          %h1= c
+          %h1.col-md-12= c
         = yield
     .footer-container
       %footer.wrapper

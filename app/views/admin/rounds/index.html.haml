@@ -1,6 +1,3 @@
-- content_for :header do
-  Round scores
-
 = form_tag('/admin/rounds', class: 'form-horizontal') do |f|
   .fixed-add-rounds
     .col-md-4
@@ -9,6 +6,7 @@
     .col-md-2.col-md-offset-6= submit_tag('Add rounds', class: 'btn btn-primary btn-small')
 
   .fixed-rounds-container
+    %h1.col-md-12 Round scores
     - @golfers.each.with_index do |golfer, index|
       = fields_for("golfer[#{golfer.id}]", golfer.rounds.new(handicap: golfer.handicap)) do |round_form|
         .col-md-4.scrollable-table-container
