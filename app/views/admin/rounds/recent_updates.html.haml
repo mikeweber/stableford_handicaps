@@ -1,7 +1,11 @@
 - content_for :header do
   Recent rounds
 
-%h3== Scores on #{fdate @rounds.first.occurred_on}
+%ul.col-md-12.list-group
+  - @recent_round_dates.each do |date, count|
+    %li.list-group-item.col-md-1= link_to("#{date.strftime('%b %d, %Y')} (#{count})", recent_updates_admin_rounds_path(occurred_on: date.strftime('%Y-%m-%d')))
+
+%h3== Scores on #{fdate @occurred_on}
 
 %ul.col-md-12.list-group
   - @rounds.each do |round|

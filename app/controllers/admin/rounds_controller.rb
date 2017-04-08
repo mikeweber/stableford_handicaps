@@ -4,8 +4,8 @@ class Admin::RoundsController < AdminApplicationController
   end
 
   def recent_updates
-    r = Round.arel_table
-    @rounds = Round.where(r[:occurred_on].eq(r.project(r[:occurred_on].maximum))).includes(:golfer)
+    @rounds, @occurred_on = Round.for_date(occurred_on)
+    @recent_round_dates = Round.recent_dates
   end
 
   def create
@@ -20,5 +20,11 @@ class Admin::RoundsController < AdminApplicationController
   def destroy
     Round.find(params[:id]).destroy
     redirect_to admin_rounds_path
+  end
+
+  private
+
+  def occurred_on
+    params[:occurred_on].presence
   end
 end
