@@ -40,4 +40,12 @@ RSpec.describe Golfer, type: :model do
     golfer = Golfer.create!(first_name: 'Guest', identifier: '0', handicap: 0)
     expect(golfer.full_name).to eq('Guest')
   end
+
+  it "should not allow the handicap for a golfer to be greater than 26" do
+    golfer = Golfer.create!(handicap: 27, identifier: '0')
+    expect(golfer.handicap).to eq(26)
+
+    golfer.handicap = 30
+    expect(golfer.handicap).to eq(26)
+  end
 end

@@ -20,4 +20,8 @@ class Golfer < ActiveRecord::Base
   def date_of_most_recent_round
     rounds.recent.limit(1).pluck(:occurred_on).first
   end
+
+  def handicap=(cap)
+    self[:handicap] = [26, cap].min
+  end
 end

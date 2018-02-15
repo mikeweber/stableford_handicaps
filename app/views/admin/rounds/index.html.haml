@@ -19,7 +19,7 @@
                   = golfer.full_name_with_member_id
                 %th.round-score
                   %span.current-handicap= golfer.handicap
-                  %span.high-score-total== (Total #{HandicapCalculator.new(golfer).sum_of_best_scores})
+                  %span.high-score-total== (Total #{HandicapCalculator.new(golfer).sum_of_best_rounds})
               %tr
                 %th.round-date Score
                 %th.round-score Hdcp

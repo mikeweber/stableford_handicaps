@@ -1,0 +1,26 @@
+- content_for :header do
+  Recent rounds
+
+%ul.col-md-12.list-group
+  - @recent_round_dates.each do |date, count|
+    %li.list-group-item.col-md-1= link_to("#{date.strftime('%b %d, %Y')} (#{count})", rounds_path(occurred_on: date.strftime('%Y-%m-%d')))
+
+%h3== Scores on #{fdate @occurred_on}
+
+%ul.col-md-12.list-group
+  %li.list-group-item
+    .col-md-1
+      %h5.handicap_summary Old =&gt; New hdcp
+    %h5.golfer_summary Golfer
+  - @rounds.each do |round|
+    %li.list-group-item
+      .col-md-1
+        = round.handicap
+        = handicap_movement_since_last_round(round.golfer.handicap, round.handicap)
+        %span.handicap_summary= round.golfer.handicap
+      .col-md-1
+        %span.round_date= fdate round.occurred_on
+      %span.golfer_summary
+        - path = current_admin ? edit_admin_golfer_path(round.golfer) : golfer_path(round.golfer)
+        = link_to(round.golfer.full_name_with_member_id, path)
+

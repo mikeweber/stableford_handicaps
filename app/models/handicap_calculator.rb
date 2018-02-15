@@ -53,24 +53,31 @@ class HandicapCalculator
     return false if rounds.length <= 2
 
     handicap_changed = false
-    while net_average(round_net_scores(rounds)) <= 34
-      golfer.handicap += 1
-      handicap_changed = :up
-    end
-    while net_average(round_net_scores(rounds)) >= 36.5
-      golfer.handicap -= 1
+    avg = average(round_gross_scores(best_recent_rounds(rounds)))
+    handicap_range = [34-avg, 36.5-avg]
+    if golfer.handicap > handicap_range[1]
+      golfer.handicap = handicap_range[1].floor
       handicap_changed = :down
+    elsif golfer.handicap <= handicap_range[0]
+      golfer.handicap = handicap_range[0].floor + 1
+      handicap_changed = :up
     end
 
     return handicap_changed
   end
 
   def net_average(recent_scores = recent_round_net_scores)
-    sum_of_best_scores(recent_scores) / round_limit(recent_scores).to_f
+    average(recent_scores)
   end
 
-  def sum_of_best_scores(recent_scores = recent_round_net_scores)
-    best_recent_scores(recent_scores).sum
+  def average(recent_scores = recent_round_gross_scores)
+    recent_scores.sum / recent_scores.length.to_f
+  end
+
+  def sum_of_best_rounds(rounds = best_recent_rounds)
+    rounds.inject(0) do |sum, round|
+      sum + round.net_score
+    end
   end
 
   def best_recent_scores(scores)
@@ -81,7 +88,7 @@ class HandicapCalculator
     sorted_rounds(rounds)[0..(round_limit(rounds) - 1)]
   end
 
-  def sorted_scores(scores = recent_round_net_scores)
+  def sorted_scores(scores = recent_round_gross_scores)
     scores.sort_by { |score| -score }
   end
 
@@ -90,11 +97,19 @@ class HandicapCalculator
   end
 
   def recent_round_net_scores
-    round_net_scores(golf_rounds.recent)
+    round_net_scores(best_recent_rounds(golf_rounds.recent))
   end
 
   def round_net_scores(rounds)
     rounds.collect { |round| round.net_score(golfer.handicap) }
+  end
+
+  def recent_round_gross_scores
+    round_gross_scores(golf_rounds.recent)
+  end
+
+  def round_gross_scores(rounds)
+    rounds.map(&:gross_score)
   end
 
   def round_limit(scores = recent_rounds)
