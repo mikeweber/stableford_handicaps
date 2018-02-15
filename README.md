@@ -1,14 +1,14 @@
-== README
+# README
 
 Ruby version: 2.3.5
 
-= Purpose
+# Purpose
 Track the stableford scores of golf games, and adjust player handicaps based on
 the the best 5 of the most recent 10 rounds. Handicaps will be adjusted when,
 using the player's current handicap, their 5 best rounds either average below 34
 (handicap will go up), or those rounds average above 36.5 (handicap will go down).
 
-= TODO
+# TODO
 - [x] Add admins and logins to protect editing of handicaps
 - [x] Streamline "Post scores" page -- remove history from this page
 - [x] Create a summary page that shows only the players who have changed handicaps on a given day
