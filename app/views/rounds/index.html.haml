@@ -10,14 +10,26 @@
 %ul.col-md-12.list-group
   %li.list-group-item
     .col-md-1
+      %h5 Score
+    .col-md-1
       %h5.handicap_summary Old =&gt; New hdcp
+    - if current_admin
+      .col-md-1
+        %h5 Total
     %h5.golfer_summary Golfer
   - @rounds.each do |round|
     %li.list-group-item
       .col-md-1
+        = round.net_score
+      .col-md-1
         = round.handicap
-        = handicap_movement_since_last_round(round.golfer.handicap, round.handicap)
-        %span.handicap_summary= round.golfer.handicap
+        - new_handicap = round.next_round.try(:handicap) || round.golfer.handicap
+        = handicap_movement_since_last_round(new_handicap, round.handicap)
+        %span.handicap_summary= new_handicap
+      - if current_admin
+        .col-md-1
+          - calculator = HandicapCalculator.new(round.golfer)
+          = calculator.sum_of_best_rounds
       .col-md-1
         %span.round_date= fdate round.occurred_on
       %span.golfer_summary

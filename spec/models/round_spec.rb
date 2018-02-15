@@ -15,6 +15,20 @@ RSpec.describe Round, type: :model do
     end
   end
 
+  context "#next_round" do
+    it "returns a round that occurs after the current round" do
+      golfer = Golfer.create!(first_name: 'test', last_name: 'golfer', identifier: '1234')
+
+      round1 = Round.create!(golfer: golfer, occurred_on: 5.days.ago, gross_score: 20, handicap: 16)
+      round2 = Round.create!(golfer: golfer, occurred_on: 4.days.ago, gross_score: 20, handicap: 16)
+      round3 = Round.create!(golfer: golfer, occurred_on: 3.days.ago, gross_score: 20, handicap: 16)
+
+      expect(round1.next_round).to eq(round2)
+      expect(round2.next_round).to eq(round3)
+      expect(round3.next_round).to be_nil
+    end
+  end
+
   context "when printing net score" do
     before(:each) do
       golfer = Golfer.create!(first_name: 'test', last_name: 'golfer', identifier: '1234')

@@ -24,6 +24,17 @@ class Round < ActiveRecord::Base
     Date.parse(date)
   end
 
+  def next_round
+    self.golfer.rounds.where(occurred_on: next_round_query.minimum(:occurred_on)).first
+  end
+
+  def next_round_query
+    r = self.class.arel_table
+
+    self.golfer.rounds
+      .where(r[:occurred_on].gt(self.class.as_date(self.occurred_on)))
+  end
+
   def net_score(current_handicap = handicap)
     return nil if gross_score.blank?
     gross_score + current_handicap.to_i
