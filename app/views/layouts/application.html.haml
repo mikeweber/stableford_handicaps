@@ -19,7 +19,7 @@
             - if current_admin
               %ul.nav.navbar-nav
                 %li{ class: ('active' if current_page?(admin_golfers_path)) }= link_to 'Manage golfers', admin_golfers_path
-                %li{ class: ('active' if current_page?(admin_rounds_path)) }= link_to 'Post scores', admin_rounds_path
+                %li{ class: ('active' if current_page?(admin_rounds_path)) }= link_to 'New scores', admin_rounds_path
                 %li{ class: ('active' if current_page?(rounds_path)) }= link_to 'Recent round summary', rounds_path
               %ul.nav.navbar-nav.navbar-right
                 %li= link_to 'Logout', sign_out_sessions_path, data: { method: :delete }

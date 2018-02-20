@@ -102,7 +102,11 @@ a[data-method="delete"] {
 
   td, th {
     &.round-date {
-      width: 65%;
+      width: 66%;
+    }
+
+    &.round-score {
+      width: 17%;
     }
   }
 }

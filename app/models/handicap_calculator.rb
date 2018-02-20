@@ -5,7 +5,7 @@ class HandicapCalculator
   end
 
   def post_score(score, date_of_round = Date.today, handicap = golfer.handicap)
-    golf_rounds.create!(handicap: handicap, net_score: score, occurred_on: date_of_round)
+    golf_rounds.create!(handicap: handicap, net_score: score, occurred_on: date_of_round, medical_status: golfer.medical_status)
 
     return self
   end
@@ -76,7 +76,7 @@ class HandicapCalculator
 
   def sum_of_best_rounds(rounds = best_recent_rounds)
     rounds.inject(0) do |sum, round|
-      sum + round.net_score
+      sum + round.net_score(golfer.handicap)
     end
   end
 

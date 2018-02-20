@@ -13,6 +13,22 @@ RSpec.describe HandicapCalculator, type: :model do
     expect(last_round.net_score).to eq(30)
     expect(last_round.gross_score).to eq(25)
     expect(last_round.occurred_on).to eq(round_date)
+    expect(last_round).to_not be_medical_status
+  end
+
+  it "marks the round as a medical status round when the golfer is on medical status" do
+    golfer = Golfer.create!(first_name: 'test', last_name: 'golfer', identifier: '1', handicap: 5, medical_status: true)
+    round_date = Date.today
+    calculator = HandicapCalculator.new(golfer)
+
+    expect {
+      calculator.post_score(30, round_date)
+    }.to change(golfer.rounds, :count).by(1)
+    last_round = golfer.rounds.last
+    expect(last_round.net_score).to eq(30)
+    expect(last_round.gross_score).to eq(25)
+    expect(last_round.occurred_on).to eq(round_date)
+    expect(last_round).to be_medical_status
   end
 
   it "calculates the average net score of the best 5 rounds from the 10 most recent rounds" do
@@ -252,5 +268,33 @@ RSpec.describe HandicapCalculator, type: :model do
       expect { @calculator.remove_score(recent_round.id) }.to_not change(@calculator.golfer, :handicap).from(20)
     end
 
+  end
+
+  context "#sum_of_best_rounds" do
+    it "should add up the gross scores plus the current handicap" do
+      golfer = Golfer.create!(first_name: 'New', last_name: 'Player', identifier: '0', handicap: 15)
+      @calculator = HandicapCalculator.new(golfer)
+
+      @calculator.post_score(41, 11.days.ago).update_handicap!
+      expect(@calculator.golfer.handicap).to eq(15)
+      @calculator.post_score(40, 10.days.ago).update_handicap!
+      expect(@calculator.golfer.handicap).to eq(15)
+      @calculator.post_score(36, 9.days.ago).update_handicap!
+      @calculator.post_score(32, 8.days.ago).update_handicap!
+      expect(@calculator.golfer.handicap).to eq(11)
+      @calculator.post_score(40, 7.days.ago).update_handicap!
+      @calculator.post_score(30, 6.days.ago).update_handicap!
+      @calculator.post_score(28, 5.days.ago).update_handicap!
+      @calculator.post_score(28, 4.days.ago).update_handicap!
+      expect(@calculator.golfer.handicap).to eq(9)
+      @calculator.post_score(32, 3.days.ago).update_handicap!
+      expect(@calculator.golfer.handicap).to eq(10)
+      @calculator.post_score(32, 2.days.ago).update_handicap!
+      @calculator.post_score(30, 1.days.ago).update_handicap!
+      expect(@calculator.golfer.handicap).to eq(11)
+
+      total = 25 + 21 + 29 + 23 + 22 + (11 * 5)
+      expect(@calculator.sum_of_best_rounds).to eq(total)
+    end
   end
 end

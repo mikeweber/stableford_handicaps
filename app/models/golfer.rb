@@ -21,7 +21,17 @@ class Golfer < ActiveRecord::Base
     rounds.recent.limit(1).pluck(:occurred_on).first
   end
 
-  def handicap=(cap)
-    self[:handicap] = [26, cap].min
+  def handicap=(hdcp)
+    self[:handicap] = limit_handicap(hdcp)
+  end
+
+  def adjusted_handicap
+    limit_handicap(handicap + (2 if medical_status?).to_i)
+  end
+
+  private
+
+  def limit_handicap(hdcp)
+    [26, hdcp].min
   end
 end

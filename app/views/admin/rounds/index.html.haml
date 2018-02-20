@@ -17,16 +17,18 @@
                   = link_to(admin_golfer_path(golfer), target: '_blank') do
                     %span.glyphicon.glyphicon-search
                   = golfer.full_name_with_member_id
-                %th.round-score
+                %th.round-score{ colspan: 2 }
                   %span.current-handicap= golfer.handicap
                   %span.high-score-total== (Total #{HandicapCalculator.new(golfer).sum_of_best_rounds})
               %tr
-                %th.round-date Score
+                %th.round-date
+                %th.round-score Score
                 %th.round-score Hdcp
 
             %tbody
               %tr
-                %td.round-date= round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
+                %td.round-date
+                %td.round-score= round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
                 %td.round-score= round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
 
           .scrollable-table
@@ -36,4 +38,5 @@
                   %tr
                     %td.round-date= fdate round.occurred_on
                     %td.round-score= round.net_score
+                    %td.round-score= round.handicap
 
