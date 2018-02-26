@@ -4,8 +4,8 @@ class HandicapCalculator
     @golfer     = golfer
   end
 
-  def post_score(score, date_of_round = Date.today, handicap = golfer.handicap)
-    golf_rounds.create!(handicap: handicap, net_score: score, occurred_on: date_of_round, medical_status: golfer.medical_status)
+  def post_score(score, date_of_round = Date.today, handicap = golfer.handicap, medical_status = golfer.medical_status)
+    golf_rounds.create!(handicap: handicap, net_score: score, occurred_on: date_of_round, medical_status: medical_status)
 
     return self
   end

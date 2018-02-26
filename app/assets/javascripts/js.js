@@ -11,6 +11,24 @@ $(document).on('change', '.track_changes', function() {
   $this[fn]('changed')
 })
 
+$(document).on('click', '.medical.toggle', function() {
+  var $this = $(this)
+  var id = $this.data('golfer-id')
+  var medical = $this.data('medical')
+  var $icon = $('#medical-icon-' + id)
+  var $status_field = $('#golfer_' + id + '_medical_status')
+
+  if (medical) {
+    $icon.addClass('disabled')
+    $this.data('medical', false)
+    $status_field.val(false)
+  } else {
+    $icon.removeClass('disabled')
+    $this.data('medical', true)
+    $status_field.val(true)
+  }
+})
+
 $(document).on('submit', 'form', function() {
   form_submitting = true
 })

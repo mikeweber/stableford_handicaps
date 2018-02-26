@@ -110,3 +110,20 @@ a[data-method="delete"] {
     }
   }
 }
+
+.medical {
+  color: #E00;
+  float: right;
+
+  &.toggle {
+    cursor: pointer;
+  }
+}
+
+.medical.disabled {
+  color: #CCC;
+
+  &:hover {
+    color: #333;
+  }
+}

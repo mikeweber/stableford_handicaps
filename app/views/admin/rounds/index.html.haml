@@ -8,7 +8,7 @@
   .fixed-rounds-container
     %h1.col-md-12 Round scores
     - @golfers.each.with_index do |golfer, index|
-      = fields_for("golfer[#{golfer.id}]", golfer.rounds.new(handicap: golfer.handicap)) do |round_form|
+      = fields_for("golfer[#{golfer.id}]", golfer.rounds.new(handicap: golfer.adjusted_handicap)) do |round_form|
         .col-md-4.scrollable-table-container
           %table.table.table-bordered.scrollable-table-header
             %thead
@@ -29,7 +29,11 @@
               %tr
                 %td.round-date
                 %td.round-score= round_form.text_field(:net_score, class: 'shortnum track_changes', tabindex: index + 2)
-                %td.round-score= round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
+                %td.round-score
+                  = round_form.text_field(:handicap, class: 'shortnum track_changes', tabindex: 1000 + index)
+                  = round_form.hidden_field(:medical_status)
+                  %span.medical.toggle{ id: "medical-icon-#{golfer.id}", class: ('disabled' unless golfer.medical_status), data: { golfer_id: golfer.id, medical: golfer.medical_status?.to_json } }
+                    %i.fa.fa-medkit
 
           .scrollable-table
             %table.table.table-bordered
@@ -38,5 +42,8 @@
                   %tr
                     %td.round-date= fdate round.occurred_on
                     %td.round-score= round.net_score
-                    %td.round-score= round.handicap
+                    %td.round-score
+                      = round.handicap
+                      - if round.medical_status?
+                        %span.medical.fa.fa-medkit
 

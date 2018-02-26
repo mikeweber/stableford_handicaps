@@ -8,7 +8,7 @@ class MultiHandicapCalculator
     @updated_golfers = scores.collect do |golfer_id, score|
       next unless score[:net_score].present?
 
-      calculator = HandicapCalculator.new(Golfer.find(golfer_id)).post_score(score[:net_score], round_date, score[:handicap])
+      HandicapCalculator.new(Golfer.find(golfer_id)).post_score(score[:net_score], round_date, score[:handicap], score[:medical_status])
     end.compact
   end
 
