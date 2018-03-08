@@ -47,20 +47,16 @@ RSpec.describe Golfer, type: :model do
 
     golfer.handicap = 30
     expect(golfer.handicap).to eq(26)
+
+    golfer.handicap = '30'
+    expect(golfer.handicap).to eq(26)
   end
 
-  it "should add two for the adjusted handicap when the golfer is on medical status" do
-    golfer = Golfer.create!(handicap: 23, identifier: '0', medical_status: true)
-    expect(golfer.adjusted_handicap).to eq(25)
-  end
+  it "should set handicap to nil if blank is passed in" do
+    golfer = Golfer.create!(handicap: '18', identifier: '0')
+    expect(golfer.handicap).to eq(18)
 
-  it "should not add any strokes for the adjusted handicap when the golfer is not on medical status" do
-    golfer = Golfer.create!(handicap: 23, identifier: '0')
-    expect(golfer.adjusted_handicap).to eq(23)
-  end
-
-  it "should limit medical strokes to 26" do
-    golfer = Golfer.create!(handicap: 25, identifier: '0', medical_status: true)
-    expect(golfer.adjusted_handicap).to eq(26)
+    golfer.handicap = ''
+    expect(golfer.handicap).to be_nil
   end
 end

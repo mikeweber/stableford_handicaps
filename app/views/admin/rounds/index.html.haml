@@ -8,7 +8,7 @@
   .fixed-rounds-container
     %h1.col-md-12 Round scores
     - @golfers.each.with_index do |golfer, index|
-      = fields_for("golfer[#{golfer.id}]", golfer.rounds.new(handicap: golfer.adjusted_handicap)) do |round_form|
+      = fields_for("golfer[#{golfer.id}]", golfer.rounds.new(handicap: golfer.handicap)) do |round_form|
         .col-md-4.scrollable-table-container
           %table.table.table-bordered.scrollable-table-header
             %thead

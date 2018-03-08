@@ -25,13 +25,11 @@ class Golfer < ActiveRecord::Base
     self[:handicap] = limit_handicap(hdcp)
   end
 
-  def adjusted_handicap
-    limit_handicap(handicap + (2 if medical_status?).to_i)
-  end
-
   private
 
   def limit_handicap(hdcp)
-    [26, hdcp].min
+    return if hdcp.blank?
+
+    [26, hdcp.to_i].min
   end
 end

@@ -1,4 +1,4 @@
-= form_for(@golfer, class: 'form-horizontal') do |f|
+= form_for([:admin, @golfer], class: 'form-horizontal') do |f|
   .form-group
     = f.label :first_name, nil, class: 'col-sm-2'
     .col-sm-10
