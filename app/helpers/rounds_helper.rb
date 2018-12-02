@@ -2,7 +2,7 @@ module RoundsHelper
   def handicap_movement_since_last_round(handicap, previous_handicap)
     class_name = 'placeholder'
 
-    if previous_handicap
+    if handicap && previous_handicap
       if handicap < previous_handicap
         class_name = 'arrow-down green'
       elsif handicap > previous_handicap
