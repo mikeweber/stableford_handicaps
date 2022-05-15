@@ -16,11 +16,12 @@ class Round < ActiveRecord::Base
   end
 
   def self.max_date
-    self.pluck(self.arel_table[:occurred_on].maximum.to_sql).first
+    self.pluck(self.arel_table[:occurred_on].maximum).first
   end
 
   def self.as_date(date)
     return date if date.is_a?(Date)
+    return if date.nil?
     Date.parse(date)
   end
 

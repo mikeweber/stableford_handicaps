@@ -46,7 +46,6 @@ $(window).on('page:before-change', function(e) {
 
   return confirm(confirmation_message)
 })
-console.log('loaded')
 
 function isBlank(val) {
   return typeof val === 'undefined' || val === null || val === ''
