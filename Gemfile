@@ -33,6 +33,7 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec'
   gem 'rspec-rails', '~> 3.0'
+  gem 'better_errors'
 end
 
 group :production do

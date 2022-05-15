@@ -5,7 +5,8 @@ class Admin::RoundsController < AdminApplicationController
 
   def create
     round_date = params[:occurred_on]
-    @golfers = MultiHandicapCalculator.new.post_scores_and_update_handicaps(round_date, params[:golfer])
+    golfer_params = params[:golfer].permit!
+    @golfers = MultiHandicapCalculator.new.post_scores_and_update_handicaps(round_date, golfer_params.to_hash)
 
     flash[:success] = "Posted scores for #{@golfers.length} golfers."
     redirect_to rounds_path
