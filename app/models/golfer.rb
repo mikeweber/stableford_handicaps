@@ -29,6 +29,7 @@ class Golfer < ActiveRecord::Base
 
   def limit_handicap(hdcp)
     return if hdcp.blank?
+    return hdcp.to_i if bypass_limit
 
     [26, hdcp.to_i].min
   end

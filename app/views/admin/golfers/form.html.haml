@@ -15,8 +15,13 @@
 
   .form-group
     = f.label :handicap, nil, class: 'col-sm-2'
-    .col-sm-2
+    .col-sm-10
       = f.text_field :handicap
+
+  .form-group
+    = f.label :bypass_limit, "Bypass handicap limit", class: 'col-sm-2'
+    .col-sm-10
+      = f.check_box :bypass_limit
 
   .clearfix
   .form-group

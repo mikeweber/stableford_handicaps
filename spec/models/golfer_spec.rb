@@ -52,6 +52,16 @@ RSpec.describe Golfer, type: :model do
     expect(golfer.handicap).to eq(26)
   end
 
+  it "can bypass the limit" do
+    golfer = Golfer.create!(handicap: 26, identifier: '0', bypass_limit: true)
+
+    golfer.handicap = 30
+    expect(golfer.handicap).to eq(30)
+
+    golfer.handicap = '30'
+    expect(golfer.handicap).to eq(30)
+  end
+
   it "should set handicap to nil if blank is passed in" do
     golfer = Golfer.create!(handicap: '18', identifier: '0')
     expect(golfer.handicap).to eq(18)

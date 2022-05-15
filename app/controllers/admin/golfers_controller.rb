@@ -50,6 +50,6 @@ class Admin::GolfersController < AdminApplicationController
   private
 
   def golfer_params
-    params.require(:golfer).permit(:first_name, :last_name, :identifier, :handicap)
+    params.require(:golfer).permit(:first_name, :last_name, :identifier, :bypass_limit, :handicap)
   end
 end
