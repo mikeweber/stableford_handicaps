@@ -1,4 +1,4 @@
-class AddRound < ActiveRecord::Migration
+class AddRound < ActiveRecord::Migration[7.2]
   def change
     create_table :rounds do |t|
       t.integer :golfer_id

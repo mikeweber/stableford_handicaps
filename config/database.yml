@@ -8,7 +8,7 @@ default: &default
   adapter: postgresql
   encoding: unicode
   username: stableford
-  password:
+  password: stableford
   pool: 5
   timeout: 5000
 
