@@ -15,7 +15,7 @@ RSpec.describe MultiHandicapCalculator, type: :model do
       golfers[2].id => { handicap: golfers[2].handicap, net_score: '' },
       golfers[3].id => { handicap: golfers[3].handicap, net_score: '32' },
       golfers[4].id => { handicap: golfers[4].handicap, net_score: '' }
-    }
+    }.deep_stringify_keys
 
     calculator = MultiHandicapCalculator.new
     changed_golfers = calculator.post_scores(Date.today.strftime('%m/%d/%Y'), params).map(&:golfer)
@@ -51,7 +51,7 @@ RSpec.describe MultiHandicapCalculator, type: :model do
       golfers[0].id => { handicap: golfers[0].handicap, net_score: '40' },
       golfers[1].id => { handicap: golfers[1].handicap, net_score: '36' },
       golfers[2].id => { handicap: golfers[2].handicap, net_score: '33' },
-    }
+    }.deep_stringify_keys
 
     calculator = MultiHandicapCalculator.new
     changed_golfers = calculator.post_scores_and_update_handicaps(Date.today.strftime('%m/%d/%Y'), params)

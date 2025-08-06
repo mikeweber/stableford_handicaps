@@ -6,17 +6,17 @@ class MultiHandicapCalculator
   def post_scores(round_date, scores)
     round_date = Date.strptime(round_date, "%m/%d/%Y")
 
-    actual_scores = scores.reject { |_, score| score[:net_score].blank? }
+    actual_scores = scores.reject { |_, score| score["net_score"].blank? }
     golfers = Golfer.where(id: actual_scores.keys).index_by(&:id)
 
     actual_scores.filter_map do |golfer_id, score|
-      golfer = golfers[golfer_id]
+      golfer = golfers[golfer_id.to_i]
 
       HandicapCalculator.new(golfer).post_score(
-        score[:net_score],
+        score["net_score"],
         round_date,
-        score[:handicap],
-        score[:medical_status],
+        score["handicap"],
+        score["medical_status"],
       )
     end
   end
