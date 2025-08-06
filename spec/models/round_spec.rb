@@ -15,6 +15,22 @@ RSpec.describe Round, type: :model do
     end
   end
 
+  context ".recent_dates" do
+    it "returns the most recent dates played, up to the limit" do
+      golfer1 = Golfer.create!(first_name: 'test', last_name: 'golfer', identifier: '1234')
+      golfer2 = Golfer.create!(first_name: 'other', last_name: 'golfer', identifier: '1235')
+
+      round1 = Round.create!(golfer: golfer1, occurred_on: 5.days.ago, gross_score: 20, handicap: 16)
+      round2 = Round.create!(golfer: golfer1, occurred_on: 4.days.ago, gross_score: 20, handicap: 16)
+      round3 = Round.create!(golfer: golfer1, occurred_on: 3.days.ago, gross_score: 20, handicap: 16)
+      round4 = Round.create!(golfer: golfer2, occurred_on: 5.days.ago, gross_score: 20, handicap: 16)
+      round5 = Round.create!(golfer: golfer2, occurred_on: 4.days.ago, gross_score: 20, handicap: 16)
+
+      recent = Round.recent_dates(2)
+      expect(recent).to eq([[3.days.ago.to_date, 1], [4.days.ago.to_date, 2]])
+    end
+  end
+
   context "#next_round" do
     it "returns a round that occurs after the current round" do
       golfer = Golfer.create!(first_name: 'test', last_name: 'golfer', identifier: '1234')

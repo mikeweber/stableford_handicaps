@@ -7,7 +7,7 @@ class Round < ActiveRecord::Base
   scope :ordered_by_recent, -> { order(arel_table[:occurred_on].desc) }
 
   def self.recent_dates(limit = 5)
-    group(:occurred_on).order('occurred_on desc').limit(limit).pluck('occurred_on, count(*) as num')
+    group(:occurred_on).order('occurred_on desc').limit(limit).pluck(Arel.sql('occurred_on, count(*) as num'))
   end
 
   def self.for_date(occurred_on)
